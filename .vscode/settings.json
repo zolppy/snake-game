@@ -1,0 +1,13 @@
+{
+  "editor.fontSize": 14,
+  "editor.tabSize": 2,
+  "editor.lineHeight": 1,
+  "editor.fontFamily": "'Droid Sans Mono', 'monospace', monospace",
+  "workbench.colorTheme": "Dracula",
+  "editor.wordWrap": "on",
+  "editor.wordWrapColumn": 120,
+  "editor.wrappingIndent": "indent",
+
+  "editor.formatOnSave": false,
+  "editor.formatOnType": false,
+}
