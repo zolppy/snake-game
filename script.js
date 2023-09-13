@@ -103,38 +103,6 @@ function startGame() {
     let fx = Math.floor(Math.random() * 15 +1) * box;
     let fy = Math.floor(Math.random() * 15 +1) * box;
 
-    let find;
-
-    while (true) {
-      find = false;
-
-      for (let i = 0; i < snake.length; i++) {
-        if (fx === snake[i].x) {
-          find = true;
-          fx = Math.floor(Math.random() * 15 +1) * box;
-        }
-      }
-
-      if (!find) {
-        break;
-      }
-    }
-
-    while (true) {
-      find = false;
-
-      for (let i = 0; i < snake.length; i++) {
-        if (fy === snake[i].y) {
-          find = true;
-          fy = Math.floor(Math.random() * 15 +1) * box;
-        }
-      }
-
-      if (!find) {
-        break;
-      }
-    }
-
     food.x = fx;
     food.y = fy;
   }
