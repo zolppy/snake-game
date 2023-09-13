@@ -1,7 +1,13 @@
+let version = 'v0.00000000000000001';
+let score = 0;
 let canvas = document.getElementById('stage');
 let context = canvas.getContext('2d');
 let box = 32;
 let snake = [];
+
+console.clear();
+console.info(`Snake Game ${version}`);
+
 snake[0] = {
   x: 8 * box,
   y: 8 * box
@@ -100,6 +106,7 @@ function startGame() {
       snake.pop();
   } else {
     eat.play();
+    console.info(`Score: ${++score}`);
 
     let fx = Math.floor(Math.random() * 15 + 1) * box;
     let fy = Math.floor(Math.random() * 15 + 1) * box;
