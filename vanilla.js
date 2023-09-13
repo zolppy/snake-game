@@ -1,76 +1,116 @@
-window.onload = function(){
-  var stage = document.getElementById('stage');
-  var ctx = stage.getContext('2d');
-  document.addEventListener('keydown', keyPush);
+let canvas = document.getElementById('stage');
+let context = canvas.getContext('2d');
+let box = 32;
+let snake = [];
+snake[0] = {
+  x: 8 * box,
+  y: 8 * box
+}
+let direction = 'right';
+let food = {
+  x: Math.floor(Math.random() * 15 + 1) * box,
+  y: Math.floor(Math.random() * 15 + 1) * box
+}
 
-  setInterval(game, 80);
+let dead = new Audio();
+let eat = new Audio();
+let up = new Audio();
+let right = new Audio();
+let left = new Audio();
+let down = new Audio();
 
-  const vel = 1;
-  var vx = vy = 0;
-  var px = 10;
-  var py = 15;
-  var tp = 25;
-  var qp = 20;
-  var ax=ay=7;
-  var trail = [];
-  tail = 3;
+dead.src = 'audio/dead.mp3';
+eat.src = 'audio/eat.mp3';
+up.src = 'audio/up.mp3';
+right.src = 'audio/right.mp3';
+left.src = 'audio/left.mp3';
+down.src = 'audio/down.mp3';
 
-  function game(){
-    px += vx;
-    py += vy;
+const foodImg = new Image();
+foodImg.src = 'img/food.png';
 
-    if (px < 0) px = qp-1;
-    if (px > qp - 1) px = 0;
+function criarBG() {
+  context.fillStyle = 'lightgreen';
+  context.fillRect(0, 0, 16 * box, 16 * box);
+}
 
-    if (py < 0) py = qp-1;
-    if (py > qp - 1) py = 0;
-
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0,0, stage.width, stage.height);
-
-    ctx.fillStyle = 'red';
-    ctx.fillRect(ax*tp, ay*tp, tp,tp);
-
-    ctx.fillStyle = 'gray';
-    for (var i = 0; i < trail.length; i++) {
-      ctx.fillRect(trail[i].x*tp, trail[i].y*tp, tp-1,tp-1);
-      if (trail[i].x == px && trail[i].y == py)
-      {
-        vx = vy=0;
-        tail =3;
-      }
-    }
-
-    trail.push({x:px,y:py })
-    while (trail.length > tail) {
-      trail.shift();
-    }
-
-    if (ax==px && ay==py){
-      tail++;
-      ax = Math.floor(Math.random()*qp);
-      ay = Math.floor(Math.random()*qp);
-    }
-  }
-
-  function keyPush(event){
-    switch (event.keyCode) {
-      case 37: // Left
-        vx = -vel;
-        vy = 0;
-        break;
-      case 38: // up
-        vx = 0;
-        vy = -vel;
-        break;
-      case 39: // right
-        vx = vel;
-        vy = 0;
-        break;
-      case 40: // down
-        vx = 0;
-        vy = vel;
-        break;
-    }
+function criarCobrinha () {
+  for (i = 0; i < snake.length; i++) {
+    context.fillStyle = 'green';
+    context.fillRect(snake[i].x, snake[i].y, box, box);
   }
 }
+
+function drawFood () {
+  //context.fillStyle = 'red';
+  //context.fillRect(food.x, food.y, box, box);
+  context.drawImage(foodImg, food.x, food.y);
+}
+
+document.addEventListener('keydown', update);
+
+function update(event) {
+  if (event.keyCode == 37 && direction != 'right') {
+    left.play();
+    direction = 'left'
+  }
+
+  if (event.keyCode == 38 && direction != 'down') {
+    up.play();
+    direction = 'up'
+  }
+
+  if (event.keyCode == 39 && direction != 'left') {
+    right.play();
+    direction = 'right'
+  }
+
+  if (event.keyCode == 40 && direction != 'up') {
+    down.play();
+    direction = 'down'
+  }
+}
+
+function startGame() {
+  if (snake[0].x > 15 * box && direction == 'right') snake[0].x = 0;
+  if (snake[0].x < 0 && direction == 'left') snake[0].x = 16 * box;
+  if (snake[0].y > 15 * box && direction == 'down') snake[0].y = 0;
+  if (snake[0].y < 0 && direction == 'up') snake[0].y = 16 * box;
+  
+  for (i = 1; i < snake.length; i++) {
+    if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
+      clearInterval(game);
+      dead.play();
+      alert('Fim de jogo!');
+    }
+  }
+
+  criarBG();
+  criarCobrinha();
+  drawFood();
+
+  let snakeX = snake[0].x;
+  let snakeY = snake[0].y;
+
+  if (direction == 'right') snakeX += box;
+  if (direction == 'left') snakeX -= box;
+  if (direction == 'up') snakeY -= box;
+  if (direction == 'down') snakeY += box;
+
+  if (snakeX != food.x || snakeY != food.y) {
+      snake.pop();
+  } else {
+    eat.play();
+    food.x = Math.floor(Math.random() * 15 +1) * box;
+    food.y = Math.floor(Math.random() * 15 +1) * box;
+  }
+  
+  let newHead = {
+    x: snakeX,
+    y: snakeY
+  }
+
+  snake.unshift(newHead);
+}
+
+let game = setInterval(startGame, 100);
