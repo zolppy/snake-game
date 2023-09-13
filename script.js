@@ -100,8 +100,26 @@ function startGame() {
       snake.pop();
   } else {
     eat.play();
-    let fx = Math.floor(Math.random() * 15 +1) * box;
-    let fy = Math.floor(Math.random() * 15 +1) * box;
+
+    let fx = Math.floor(Math.random() * 15 + 1) * box;
+    let fy = Math.floor(Math.random() * 15 + 1) * box;
+
+    while (true) {
+      let find = false;
+  
+      for (let i = 0; i < snake.length; i++) {
+        if (fx === snake[i].x && fy === snake[i].y) {
+          fx = Math.floor(Math.random() * 15 + 1) * box;
+          fy = Math.floor(Math.random() * 15 + 1) * box;
+          find = true;
+          break;
+        }
+      }
+  
+      if (!find) {
+        break;
+      }
+    }
 
     food.x = fx;
     food.y = fy;
