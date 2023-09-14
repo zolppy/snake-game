@@ -3,18 +3,43 @@
 body {
   width: 95vw;
   height: 95vh;
-  background-color: rgb(178, 190, 255);
-  font-family: 'Courier New', Courier, monospace;
-  color: #333;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-image: url('img/edited02.jpg');
+  background-size: cover;
+  font-family: 'Times New Roman', Times, serif;
+  color: #efefef;
 }
 
 #title {
   text-align: center;
+  font-weight: bold;
+  font-size: 2rem;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#game-container {
+  display: flex;
+  justify-content: center;
+  margin-right: 35px;
+}
+
+#info-container {
+  border: 2px solid #333;
+  margin-right: 20px;
+  background-color: lightgreen;
+  color: #333;
+  padding: 20px;
+  line-height: 2rem;
+}
+
+span {
+  display: block;
+}
+
+h2 {
+  font-weight: bold;
 }
 
 #stage {
-  border: 2px solid black;
+  border: 2px solid #333;
 }

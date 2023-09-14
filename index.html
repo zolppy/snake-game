@@ -6,12 +6,35 @@
   <title>Snake</title>
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="style.css" />
-  <script src="script.js" defer></script>
+  <script defer src="script.js"></script>
+  <link rel="stylesheet" href="reset.css" />
 </head>
 <body>
   <main>
-    <h1 id="title">SNAKE GAME</h1>
-    <canvas id="stage" width="512" height="512"></canvas>
+    <div id="container">
+      <h1 id="title">SNAKE GAME v0.1</h1>
+      <div id="game-container">
+        <div id="info-container">
+          <span id="score">Pontuação: 0</span>
+          <div id="scores">
+            <h2>Maiores pontuações</h2>
+            <span id="1">#1: null</span>
+            <span id="2">#2: null</span>
+            <span id="3">#3: null</span>
+            <span id="4">#4: null</span>
+            <span id="5">#5: null</span>
+            <span id="6">#6: null</span>
+            <span id="7">#7: null</span>
+            <span id="8">#8: null</span>
+            <span id="9">#9: null</span>
+            <span id="10">#10: null</span>
+          </div>
+        </div>
+        <div id="stage-container">
+          <canvas id="stage" width="512" height="512"></canvas>
+        </div>
+      </div>
+    </div>
   </main>
 </body>
 </html>
