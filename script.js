@@ -61,22 +61,35 @@ function compare(a, b) {
   return b - a;
 }
 
+function deviceIsCompatible() {
+  if (visualViewport.width < 1000) {
+    return false;
+  }
+
+  return true;
+}
+
 window.addEventListener('load', () => {
   const thisScores = JSON.parse(localStorage.getItem('scores'));
   const sound = JSON.parse(localStorage.getItem('sound'));
   const soundIcon = document.getElementById('soundIcon')
 
+  let compatible = deviceIsCompatible();
+
+  if (!compatible) {
+    alert('Compatível apenas com telas grandes');
+  }
 
   if (localStorage.getItem('sound') !== null) {
     if (sound === true) {
       activateSound();
-      soundIcon.src = 'http://127.0.0.1:5500/img/volume-mute-fill.svg';
+      soundIcon.src = './img/volume-mute-fill.svg';
       soundIcon.alt = 'Desativar som';
     }
     
     if (sound === false) {
       muteSound();
-      soundIcon.src = 'http://127.0.0.1:5500/img/volume-up-fill.svg';
+      soundIcon.src = './img/volume-up-fill.svg';
       soundIcon.alt = 'Ativar som';
     }
   }
@@ -298,13 +311,13 @@ function muteSound() {
 soundButton.addEventListener('click', () => {
   const soundIcon = document.getElementById('soundIcon');
 
-  if (soundIcon.src === 'http://127.0.0.1:5500/img/volume-mute-fill.svg') {
-    soundIcon.src = 'http://127.0.0.1:5500/img/volume-up-fill.svg';
+  if (soundIcon.src === './img/volume-mute-fill.svg') {
+    soundIcon.src = './img/volume-up-fill.svg';
     soundIcon.alt = 'Ativar som';
     muteSound();
     localStorage.setItem('sound', JSON.stringify(false));
   } else {
-    soundIcon.src = 'http://127.0.0.1:5500/img/volume-mute-fill.svg';
+    soundIcon.src = './img/volume-mute-fill.svg';
     soundIcon.alt = 'Desativar som';
     activateSound();
     localStorage.setItem('sound', JSON.stringify(true));
