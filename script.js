@@ -72,7 +72,7 @@ function deviceIsCompatible() {
 window.addEventListener('load', () => {
   const thisScores = JSON.parse(localStorage.getItem('scores'));
   const sound = JSON.parse(localStorage.getItem('sound'));
-  const soundIcon = document.getElementById('soundIcon')
+  const soundIcon = document.getElementById('sound-icon')
 
   let compatible = deviceIsCompatible();
 
@@ -83,14 +83,12 @@ window.addEventListener('load', () => {
   if (localStorage.getItem('sound') !== null) {
     if (sound === true) {
       activateSound();
-      soundIcon.src = 'img/volume-mute-fill.svg';
-      soundIcon.alt = 'Desativar som';
+      soundIcon.classList.replace('bi-volume-up-fill', 'bi-volume-mute-fill');
     }
     
     if (sound === false) {
       muteSound();
-      soundIcon.src = 'img/volume-up-fill.svg';
-      soundIcon.alt = 'Ativar som';
+      soundIcon.classList.replace('bi-volume-mute-fill', 'bi-volume-up-fill');
     }
   }
 
@@ -309,16 +307,16 @@ function muteSound() {
 }
 
 soundButton.addEventListener('click', () => {
-  const soundIcon = document.getElementById('soundIcon');
+  const soundIcon = document.getElementById('sound-icon');
 
-  if (soundIcon.src === './img/volume-mute-fill.svg') {
-    soundIcon.src = 'img/volume-up-fill.svg';
-    soundIcon.alt = 'Ativar som';
+  if (soundIcon.classList.contains('bi-volume-mute-fill')) {
+    soundIcon.classList.replace('bi-volume-mute-fill', 'bi-volume-up-fill');
     muteSound();
     localStorage.setItem('sound', JSON.stringify(false));
   } else {
     soundIcon.src = 'img/volume-mute-fill.svg';
     soundIcon.alt = 'Desativar som';
+    soundIcon.classList.replace('bi-volume-up-fill', 'bi-volume-mute-fill');
     activateSound();
     localStorage.setItem('sound', JSON.stringify(true));
   }

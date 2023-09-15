@@ -35,29 +35,24 @@ body {
 
 #score {
   margin-top: 7px;
-  /* border: 1px solid black; */
+  /* border-top: 1px solid #33333369;
+  border-bottom: 1px solid #33333369; */
+  margin-bottom: 80px;
   display: flex;
   align-items: center;
   justify-content: space-around;
 }
 
 #scores {
-  margin-top: 10px;
+  /* border-top: 1px solid #33333369;
+  border-bottom: 1px solid #33333369; */
+  margin-bottom: 80px;
+}
+
+/* #sound {
   border-top: 1px solid #33333369;
-}
-
-#sound {
-  margin-top: 10px;
-  border-top: 1px solid #33333369;
-}
-
-#sound > button {
-  margin-top: 10px;
-}
-
-#first {
-  margin-top: 10px;
-}
+  border-bottom: 1px solid #33333369;
+} */
 
 .order {
   margin-top: 7px;
@@ -71,9 +66,8 @@ body {
   border: 2px solid #333;
 }
 
-.order > img,
-#sound > button > img {
-  width: 30px;
+.bi {
+  font-size: 30px;
 }
 
 button {
