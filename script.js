@@ -63,6 +63,23 @@ function compare(a, b) {
 
 window.addEventListener('load', () => {
   const thisScores = JSON.parse(localStorage.getItem('scores'));
+  const sound = JSON.parse(localStorage.getItem('sound'));
+  const soundIcon = document.getElementById('soundIcon')
+
+
+  if (localStorage.getItem('sound') !== null) {
+    if (sound === true) {
+      activateSound();
+      soundIcon.src = 'http://127.0.0.1:5500/img/volume-mute-fill.svg';
+      soundIcon.alt = 'Desativar som';
+    }
+    
+    if (sound === false) {
+      muteSound();
+      soundIcon.src = 'http://127.0.0.1:5500/img/volume-up-fill.svg';
+      soundIcon.alt = 'Ativar som';
+    }
+  }
 
   let i = 0;
 
@@ -79,6 +96,7 @@ window.addEventListener('load', () => {
   scores.sort(compare);
 
   updateScores();
+  canvas.focus();
 });
 
 const updateStorage = () => {
@@ -89,22 +107,22 @@ const updateStorage = () => {
 function update(event) {
   if (event.keyCode == 37 && direction != 'right') {
     left.play();
-    direction = 'left'
+    direction = 'left';
   }
 
   if (event.keyCode == 38 && direction != 'down') {
     up.play();
-    direction = 'up'
+    direction = 'up';
   }
 
   if (event.keyCode == 39 && direction != 'left') {
     right.play();
-    direction = 'right'
+    direction = 'right';
   }
 
   if (event.keyCode == 40 && direction != 'up') {
     down.play();
-    direction = 'down'
+    direction = 'down';
   }
 }
 
@@ -259,26 +277,38 @@ let game = setInterval(startGame, 100);
 
 const soundButton = document.getElementById('button');
 
+function activateSound() {
+  dead.muted = false;
+  eat.muted = false;
+  up.muted = false;
+  right.muted = false;
+  left.muted = false;
+  down.muted = false;
+}
+
+function muteSound() {
+  dead.muted = true;
+  eat.muted = true;
+  up.muted = true;
+  right.muted = true;
+  left.muted = true;
+  down.muted = true;
+}
+
 soundButton.addEventListener('click', () => {
   const soundIcon = document.getElementById('soundIcon');
 
   if (soundIcon.src === 'http://127.0.0.1:5500/img/volume-mute-fill.svg') {
     soundIcon.src = 'http://127.0.0.1:5500/img/volume-up-fill.svg';
     soundIcon.alt = 'Ativar som';
-    dead.muted = true;
-    eat.muted = true;
-    up.muted = true;
-    right.muted = true;
-    left.muted = true;
-    down.muted = true;
+    muteSound();
+    localStorage.setItem('sound', JSON.stringify(false));
   } else {
     soundIcon.src = 'http://127.0.0.1:5500/img/volume-mute-fill.svg';
     soundIcon.alt = 'Desativar som';
-    dead.muted = false;
-    eat.muted = false;
-    up.muted = false;
-    right.muted = false;
-    left.muted = false;
-    down.muted = false;
+    activateSound();
+    localStorage.setItem('sound', JSON.stringify(true));
   }
+
+  canvas.focus();
 });
