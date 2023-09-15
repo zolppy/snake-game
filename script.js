@@ -1,8 +1,4 @@
-const scores = [];
-
-for (let i = 0; i < 10; i++) {
-  scores.push(null);
-}
+const scores = [0, 0, 0];
 let score = 0;
 
 let canvas = document.getElementById('stage');
@@ -56,9 +52,9 @@ function drawFood () {
 document.addEventListener('keydown', update);
 
 const updateScore = () => {
-  const scoreElement = document.getElementById('score');
+  const scoreElement = document.getElementById('resultsc');
 
-  scoreElement.textContent = `Pontuação: ${score}`;
+  scoreElement.textContent = score;
 }
 
 function compare(a, b) {
@@ -68,9 +64,15 @@ function compare(a, b) {
 window.addEventListener('load', () => {
   const thisScores = JSON.parse(localStorage.getItem('scores'));
 
+  let i = 0;
+
   if (thisScores) {
     for (let score of thisScores) {
-      scores.push(score);
+      scores[i] = score;
+      i++;
+      if (i === 3) {
+        break;
+      }
     }
   }
 
@@ -107,29 +109,13 @@ function update(event) {
 }
 
 function updateScores() {
-  const spanid1 = document.getElementById('1');
-  const spanid2 = document.getElementById('2');
-  const spanid3 = document.getElementById('3');
-  const spanid4 = document.getElementById('4');
-  const spanid5 = document.getElementById('5');
-  const spanid6 = document.getElementById('6');
-  const spanid7 = document.getElementById('7');
-  const spanid8 = document.getElementById('8');
-  const spanid9 = document.getElementById('9');
-  const spanid10 = document.getElementById('10');
+  const result1 = document.getElementById('result1');
+  const result2 = document.getElementById('result2');
+  const result3 = document.getElementById('result3');
 
-  scores.sort(compare);
-
-  spanid1.textContent = (scores[0] === null) ? '#1: null' : `#1: ${scores[0]}`;
-  spanid2.textContent = (scores[1] === null) ? '#2: null' : `#2: ${scores[1]}`;
-  spanid3.textContent = (scores[2] === null) ? '#3: null' : `#3: ${scores[2]}`;
-  spanid4.textContent = (scores[3] === null) ? '#4: null' : `#4: ${scores[3]}`;
-  spanid5.textContent = (scores[4] === null) ? '#5: null' : `#5: ${scores[4]}`;
-  spanid6.textContent = (scores[5] === null) ? '#6: null' : `#6: ${scores[5]}`;
-  spanid7.textContent = (scores[6] === null) ? '#7: null' : `#7: ${scores[6]}`;
-  spanid8.textContent = (scores[7] === null) ? '#8: null' : `#8: ${scores[7]}`;
-  spanid9.textContent = (scores[8] === null) ? '#9: null' : `#9: ${scores[8]}`;
-  spanid10.textContent = (scores[9] === null) ? '#10: null' : `#10: ${scores[9]}`;
+  result1.textContent = scores[0];
+  result2.textContent = scores[1];
+  result3.textContent = scores[2];
 }
 
 function gameOver() {
@@ -160,6 +146,7 @@ function gameOver() {
   );
 
   context.font = "20px arial seriff";
+
   const pressButtonText = "Pressione qualquer tecla para reiniciar o jogo",
     pressButtonTextWidth = context.measureText(pressButtonText).width;
 
@@ -168,6 +155,19 @@ function gameOver() {
     canvas.width / 2 - pressButtonTextWidth / 2,
     canvas.height / 2 + 40
   );
+
+  for (let i = 0; i < 3; i++) {
+    if (score >= scores[i]) {
+      const recordText = 'Sua pontuação é uma das maiores!'
+      const recordTextWidth = context.measureText(recordText).width;
+      context.fillText(
+        recordText,
+        canvas.width / 2 - recordTextWidth / 2,
+        canvas.height / 2 + 70
+      );
+      break;
+    }
+  }
 
   setTimeout(reload, 1000);
 }
@@ -182,10 +182,13 @@ function startGame() {
     if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
       dead.play();
       //clearInterval(game);
-      
-      for (let thisScore in scores) {
-        if (score >= thisScore) {
-          scores.push(score);
+
+      let record = false;
+
+      for (let i = 0; i < 3; i++) {
+        if (score >= scores[i]) {
+          scores[2] = score;
+          record = true;
           break;
         }
       }
@@ -253,3 +256,29 @@ function startGame() {
 }
 
 let game = setInterval(startGame, 100);
+
+const soundButton = document.getElementById('button');
+
+soundButton.addEventListener('click', () => {
+  const soundIcon = document.getElementById('soundIcon');
+
+  if (soundIcon.src === 'http://127.0.0.1:5500/img/volume-mute-fill.svg') {
+    soundIcon.src = 'http://127.0.0.1:5500/img/volume-up-fill.svg';
+    soundIcon.alt = 'Ativar som';
+    dead.muted = true;
+    eat.muted = true;
+    up.muted = true;
+    right.muted = true;
+    left.muted = true;
+    down.muted = true;
+  } else {
+    soundIcon.src = 'http://127.0.0.1:5500/img/volume-mute-fill.svg';
+    soundIcon.alt = 'Desativar som';
+    dead.muted = false;
+    eat.muted = false;
+    up.muted = false;
+    right.muted = false;
+    left.muted = false;
+    down.muted = false;
+  }
+});

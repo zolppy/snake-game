@@ -1,9 +1,9 @@
 {
-  "editor.fontSize": 14,
+  "editor.fontSize": 19,
   "editor.tabSize": 2,
   "editor.lineHeight": 1,
   "editor.fontFamily": "'Droid Sans Mono', 'monospace', monospace",
-  "workbench.colorTheme": "Dracula",
+  "workbench.colorTheme": "Dracula Soft",
   "editor.wordWrap": "on",
   "editor.wordWrapColumn": 120,
   "editor.wrappingIndent": "indent",

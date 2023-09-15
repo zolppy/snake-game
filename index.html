@@ -4,30 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Snake</title>
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="reset.css" />
   <link rel="stylesheet" href="style.css" />
   <script defer src="script.js"></script>
-  <link rel="stylesheet" href="reset.css" />
 </head>
 <body>
   <main>
     <div id="container">
-      <h1 id="title">SNAKE GAME v0.1</h1>
+      <h1 id="title">SNAKE GAME v0.3</h1>
       <div id="game-container">
         <div id="info-container">
-          <span id="score">Pontuação: 0</span>
+          <div id="score">
+            <img src="img/food.png" alt="Ícone de maçã vermelha" /><span id="resultsc">0</span>
+          </div>
           <div id="scores">
-            <h2>Maiores pontuações</h2>
-            <span id="1">#1: null</span>
-            <span id="2">#2: null</span>
-            <span id="3">#3: null</span>
-            <span id="4">#4: null</span>
-            <span id="5">#5: null</span>
-            <span id="6">#6: null</span>
-            <span id="7">#7: null</span>
-            <span id="8">#8: null</span>
-            <span id="9">#9: null</span>
-            <span id="10">#10: null</span>
+            <div id="first" class="order">
+              <img src="img/trophy-fill.svg" alt="Ícone de troféu" /><span id="result1">0</span>
+            </div>
+            <div id="second" class="order">
+              <img src="img/trophy-fill.svg" alt="Ícone de troféu" /><span id="result2">0</span>
+            </div>
+            <div id="third" class="order">
+              <img src="img/trophy-fill.svg" alt="Ícone de troféu" /><span id="result3">0</span>
+            </div>
+          </div>
+          <div id="sound">
+            <button id="button" type="button">
+              <img id="soundIcon" src="./img/volume-mute-fill.svg" alt="Desativar som" />
+            </button>
           </div>
         </div>
         <div id="stage-container">
