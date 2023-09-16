@@ -8,6 +8,6 @@
   "editor.wordWrapColumn": 120,
   "editor.wrappingIndent": "indent",
 
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   "editor.formatOnType": false,
 }

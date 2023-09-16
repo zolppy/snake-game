@@ -1,4 +1,4 @@
-const scores = [0, 0, 0];
+const highScores = [0, 0, 0];
 let score = 0;
 
 let canvas = document.getElementById('stage');
@@ -52,7 +52,7 @@ function drawFood () {
 document.addEventListener('keydown', update);
 
 const updateScore = () => {
-  const scoreElement = document.getElementById('resultsc');
+  const scoreElement = document.getElementById('score');
 
   scoreElement.textContent = score;
 }
@@ -70,7 +70,7 @@ function deviceIsCompatible() {
 }
 
 window.addEventListener('load', () => {
-  const thisScores = JSON.parse(localStorage.getItem('scores'));
+  const thisScores = JSON.parse(localStorage.getItem('high-scores'));
   const sound = JSON.parse(localStorage.getItem('sound'));
   const soundIcon = document.getElementById('sound-icon')
 
@@ -96,7 +96,7 @@ window.addEventListener('load', () => {
 
   if (thisScores) {
     for (let score of thisScores) {
-      scores[i] = score;
+      highScores[i] = score;
       i++;
       if (i === 3) {
         break;
@@ -104,15 +104,15 @@ window.addEventListener('load', () => {
     }
   }
 
-  scores.sort(compare);
+  highScores.sort(compare);
 
   updateScores();
   canvas.focus();
 });
 
 const updateStorage = () => {
-  scores.sort(compare);
-  localStorage.setItem('scores', JSON.stringify(scores));
+  highScores.sort(compare);
+  localStorage.setItem('high-scores', JSON.stringify(highScores));
 }
 
 function update(event) {
@@ -138,13 +138,13 @@ function update(event) {
 }
 
 function updateScores() {
-  const result1 = document.getElementById('result1');
-  const result2 = document.getElementById('result2');
-  const result3 = document.getElementById('result3');
+  const firstPlaceScore = document.getElementById('first-place-score');
+  const secondPlaceScore = document.getElementById('second-place-score');
+  const thirdPlaceScore = document.getElementById('third-place-score');
 
-  result1.textContent = scores[0];
-  result2.textContent = scores[1];
-  result3.textContent = scores[2];
+  firstPlaceScore.textContent = highScores[0];
+  secondPlaceScore.textContent = highScores[1];
+  thirdPlaceScore.textContent = highScores[2];
 }
 
 function gameOver() {
@@ -186,7 +186,7 @@ function gameOver() {
   );
 
   for (let i = 0; i < 3; i++) {
-    if (score >= scores[i]) {
+    if (score >= highScores[i]) {
       const recordText = 'Sua pontuação é uma das maiores!'
       const recordTextWidth = context.measureText(recordText).width;
       context.fillText(
@@ -215,8 +215,8 @@ function startGame() {
       let record = false;
 
       for (let i = 0; i < 3; i++) {
-        if (score >= scores[i]) {
-          scores[2] = score;
+        if (score >= highScores[i]) {
+          highScores[2] = score;
           record = true;
           break;
         }
@@ -227,7 +227,7 @@ function startGame() {
         gameOver();
       }, 500);
 
-      scores.sort(compare);
+      highScores.sort(compare);
       updateStorage();
       updateScores();
     }
@@ -286,7 +286,7 @@ function startGame() {
 
 let game = setInterval(startGame, 100);
 
-const soundButton = document.getElementById('button');
+const soundButton = document.getElementById('toggle-mute-sound');
 
 function activateSound() {
   dead.muted = false;

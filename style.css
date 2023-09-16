@@ -1,82 +1,82 @@
 @charset "UTF-8";
 
+:root {
+  --bg-color: lightgreen;
+  /* #efefef é mais suave que branco absoluto: #fff */
+  --default-bg-color: #efefef;
+  /* #333 é mais suave que preto absoluto: #000 */
+  --font-color: #333;
+  --border-color: #333;
+  --hover-bg-color: #918e8e;
+}
+
 body {
-  width: 95vw;
-  height: 95vh;
   background-image: url('img/bg.jpg');
   background-size: cover;
   font-family: 'Times New Roman', Times, serif;
-  color: #efefef;
+  color: var(--default-bg-color);
+  display: flex;
+  flex-direction: column;
+  /* Centralização horizontal */
+  justify-content: center;
+  /* Centralização vertical */
+  align-items: center;
 }
 
 #title {
   text-align: center;
   font-weight: bold;
   font-size: 2rem;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin: 20px auto;
 }
 
-#game-container {
+/* Para "status-container" e "stage-container" ficarem lado a lado */
+#container {
   display: flex;
-  justify-content: center;
-  margin-right: 35px;
 }
 
-#info-container {
-  border: 2px solid #333;
+#status-container {
+  border: 2px solid var(--border-color);
   margin-right: 20px;
-  background-color: lightgreen;
-  color: #333;
+  background-color: var(--bg-color);
+  color: var(--font-color);
   padding: 20px;
   line-height: 2rem;
   width: 70px;
 }
 
-#score {
-  margin-top: 7px;
-  /* border-top: 1px solid #33333369;
-  border-bottom: 1px solid #33333369; */
+#score-container,
+#high-scores-container {
   margin-bottom: 80px;
+}
+
+#score-container,
+.high-score {
+  margin-top: 7px;
   display: flex;
   align-items: center;
   justify-content: space-around;
 }
 
-#scores {
-  /* border-top: 1px solid #33333369;
-  border-bottom: 1px solid #33333369; */
-  margin-bottom: 80px;
-}
-
-/* #sound {
-  border-top: 1px solid #33333369;
-  border-bottom: 1px solid #33333369;
-} */
-
-.order {
-  margin-top: 7px;
-  /* border: 1px solid black; */
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
-#stage {
-  border: 2px solid #333;
-}
-
+/* 30px de tamanho de fonte para todos os ícones do Bootstrap Icons */
 .bi {
   font-size: 30px;
 }
 
 button {
+  /* Sem borda */
   border: none;
+  /* Formato de círculo ou próximo a isso */
   border-radius: 50%;
+  /* Cor de fundo igual o do elemento pai / sem cor de fundo */
   background-color: transparent;
 }
 
 button:hover {
   cursor: pointer;
-  background-color: #918e8e;
+  background-color: var(--hover-bg-color);
+}
+
+#stage {
+  border: 2px solid var(--border-color);
 }
