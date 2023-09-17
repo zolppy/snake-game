@@ -1,55 +1,80 @@
+/* Mapeamento */
+const soundButton = document.getElementById('toggle-mute-sound');
+const canvas = document.getElementById('stage');
+const context = canvas.getContext('2d');
+
+/* Variáveis */
+const deadSound = new Audio('audio/dead.mp3');
+const eatSound = new Audio('audio/eat.mp3');
+const keyUpSound = new Audio('audio/up.mp3');
+const keyRightSound = new Audio('audio/right.mp3');
+const keyLeftSound = new Audio('audio/left.mp3');
+const keyDownSound = new Audio('audio/down.mp3');
+
 const highScores = [0, 0, 0];
+const snake = [];
+
 let score = 0;
-
-let canvas = document.getElementById('stage');
-let context = canvas.getContext('2d');
 let box = 32;
-let snake = [];
-
-snake[0] = {
-  x: 8 * box,
-  y: 8 * box
-}
 let direction = 'right';
-let food = {
+
+const food = {
   x: Math.floor(Math.random() * 15 + 1) * box,
   y: Math.floor(Math.random() * 15 + 1) * box
-}
-
-let dead = new Audio();
-let eat = new Audio();
-let up = new Audio();
-let right = new Audio();
-let left = new Audio();
-let down = new Audio();
-
-dead.src = 'audio/dead.mp3';
-eat.src = 'audio/eat.mp3';
-up.src = 'audio/up.mp3';
-right.src = 'audio/right.mp3';
-left.src = 'audio/left.mp3';
-down.src = 'audio/down.mp3';
+};
 
 const foodImg = new Image();
 foodImg.src = 'img/food.png';
 
-function criarBG() {
+snake[0] = {
+  x: 8 * box,
+  y: 8 * box
+};
+
+/* Funções */
+const activateSound = () => {
+  const soundIcon = document.getElementById('sound-icon');
+
+  deadSound.muted = false;
+  eatSound.muted = false;
+  keyUpSound.muted = false;
+  keyRightSound.muted = false;
+  keyLeftSound.muted = false;
+  keyDownSound.muted = false;
+
+  soundIcon.classList.replace('bi-volume-up-fill', 'bi-volume-mute-fill');
+  localStorage.setItem('sound-on', JSON.stringify(true));
+}
+
+const muteSound = () => {
+  const soundIcon = document.getElementById('sound-icon');
+
+  deadSound.muted = true;
+  eatSound.muted = true;
+  keyUpSound.muted = true;
+  keyRightSound.muted = true;
+  keyLeftSound.muted = true;
+  keyDownSound.muted = true;
+
+  soundIcon.classList.replace('bi-volume-mute-fill', 'bi-volume-up-fill');
+  localStorage.setItem('sound-on', JSON.stringify(false));
+}
+
+const criarBG = () => {
   context.fillStyle = 'lightgreen';
   context.fillRect(0, 0, 16 * box, 16 * box);
 }
 
-function criarCobrinha () {
+const criarCobrinha = () => {
   for (i = 0; i < snake.length; i++) {
     context.fillStyle = 'green';
     context.fillRect(snake[i].x, snake[i].y, box, box);
   }
 }
 
-function drawFood () {
+const drawFood = () => {
   context.drawImage(foodImg, food.x, food.y);
 }
-
-document.addEventListener('keydown', update);
 
 const updateScore = () => {
   const scoreElement = document.getElementById('score');
@@ -57,87 +82,44 @@ const updateScore = () => {
   scoreElement.textContent = score;
 }
 
-function compare(a, b) {
-  return b - a;
-}
+const compare = (a, b) => b - a;
 
-function deviceIsCompatible() {
-  if (visualViewport.width < 1000) {
+const deviceIsCompatible = () => {
+  if (visualViewport.width < 900) {
     return false;
   }
 
   return true;
 }
 
-window.addEventListener('load', () => {
-  const thisScores = JSON.parse(localStorage.getItem('high-scores'));
-  const sound = JSON.parse(localStorage.getItem('sound'));
-  const soundIcon = document.getElementById('sound-icon')
-
-  let compatible = deviceIsCompatible();
-
-  if (!compatible) {
-    alert('Compatível apenas com telas grandes');
-  }
-
-  if (localStorage.getItem('sound') !== null) {
-    if (sound === true) {
-      activateSound();
-      soundIcon.classList.replace('bi-volume-up-fill', 'bi-volume-mute-fill');
-    }
-    
-    if (sound === false) {
-      muteSound();
-      soundIcon.classList.replace('bi-volume-mute-fill', 'bi-volume-up-fill');
-    }
-  }
-
-  let i = 0;
-
-  if (thisScores) {
-    for (let score of thisScores) {
-      highScores[i] = score;
-      i++;
-      if (i === 3) {
-        break;
-      }
-    }
-  }
-
-  highScores.sort(compare);
-
-  updateScores();
-  canvas.focus();
-});
-
 const updateStorage = () => {
   highScores.sort(compare);
   localStorage.setItem('high-scores', JSON.stringify(highScores));
 }
 
-function update(event) {
+const update = (event) => {
   if (event.keyCode == 37 && direction != 'right') {
-    left.play();
+    keyLeftSound.play();
     direction = 'left';
   }
 
   if (event.keyCode == 38 && direction != 'down') {
-    up.play();
+    keyUpSound.play();
     direction = 'up';
   }
 
   if (event.keyCode == 39 && direction != 'left') {
-    right.play();
+    keyRightSound.play();
     direction = 'right';
   }
 
   if (event.keyCode == 40 && direction != 'up') {
-    down.play();
+    keyDownSound.play();
     direction = 'down';
   }
 }
 
-function updateScores() {
+const updateScores = () => {
   const firstPlaceScore = document.getElementById('first-place-score');
   const secondPlaceScore = document.getElementById('second-place-score');
   const thirdPlaceScore = document.getElementById('third-place-score');
@@ -147,14 +129,14 @@ function updateScores() {
   thirdPlaceScore.textContent = highScores[2];
 }
 
-function gameOver() {
+const gameOver = () => {
   clearInterval(game);
   snake.direction = {
     x: 0,
     y: 0,
   };
 
-  function reload() {
+  const reload = () => {
     document.addEventListener("keydown", () => location.reload());
   }
 
@@ -201,16 +183,15 @@ function gameOver() {
   setTimeout(reload, 1000);
 }
 
-function startGame() {
+const startGame = () => {
   if (snake[0].x > 15 * box && direction == 'right') snake[0].x = 0;
   if (snake[0].x < 0 && direction == 'left') snake[0].x = 16 * box;
   if (snake[0].y > 15 * box && direction == 'down') snake[0].y = 0;
   if (snake[0].y < 0 && direction == 'up') snake[0].y = 16 * box;
-  
+
   for (i = 1; i < snake.length; i++) {
     if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
-      dead.play();
-      //clearInterval(game);
+      deadSound.play();
 
       let record = false;
 
@@ -223,11 +204,10 @@ function startGame() {
       }
 
       gameOver();
-      setTimeout(function () {
+      setTimeout(() => {
         gameOver();
       }, 500);
 
-      highScores.sort(compare);
       updateStorage();
       updateScores();
     }
@@ -246,9 +226,9 @@ function startGame() {
   if (direction == 'down') snakeY += box;
 
   if (snakeX != food.x || snakeY != food.y) {
-      snake.pop();
+    snake.pop();
   } else {
-    eat.play();
+    eatSound.play();
     score++;
     updateScore();
 
@@ -257,7 +237,7 @@ function startGame() {
 
     while (true) {
       let find = false;
-  
+
       for (let i = 0; i < snake.length; i++) {
         if (fx === snake[i].x && fy === snake[i].y) {
           fx = Math.floor(Math.random() * 15 + 1) * box;
@@ -266,7 +246,7 @@ function startGame() {
           break;
         }
       }
-  
+
       if (!find) {
         break;
       }
@@ -275,7 +255,7 @@ function startGame() {
     food.x = fx;
     food.y = fy;
   }
-  
+
   let newHead = {
     x: snakeX,
     y: snakeY
@@ -284,42 +264,52 @@ function startGame() {
   snake.unshift(newHead);
 }
 
-let game = setInterval(startGame, 100);
-
-const soundButton = document.getElementById('toggle-mute-sound');
-
-function activateSound() {
-  dead.muted = false;
-  eat.muted = false;
-  up.muted = false;
-  right.muted = false;
-  left.muted = false;
-  down.muted = false;
-}
-
-function muteSound() {
-  dead.muted = true;
-  eat.muted = true;
-  up.muted = true;
-  right.muted = true;
-  left.muted = true;
-  down.muted = true;
-}
-
+/* Eventos */
 soundButton.addEventListener('click', () => {
   const soundIcon = document.getElementById('sound-icon');
 
-  if (soundIcon.classList.contains('bi-volume-mute-fill')) {
-    soundIcon.classList.replace('bi-volume-mute-fill', 'bi-volume-up-fill');
-    muteSound();
-    localStorage.setItem('sound', JSON.stringify(false));
-  } else {
-    soundIcon.src = 'img/volume-mute-fill.svg';
-    soundIcon.alt = 'Desativar som';
-    soundIcon.classList.replace('bi-volume-up-fill', 'bi-volume-mute-fill');
-    activateSound();
-    localStorage.setItem('sound', JSON.stringify(true));
+  soundIcon.classList.contains('bi-volume-mute-fill') ? muteSound() : activateSound();
+});
+
+document.addEventListener('keydown', update);
+
+window.addEventListener('load', () => {
+  const thisScores = JSON.parse(localStorage.getItem('high-scores'));
+  const sound = JSON.parse(localStorage.getItem('sound-on'));
+  const soundIcon = document.getElementById('sound-icon')
+
+  let compatible = deviceIsCompatible();
+
+  if (!compatible) {
+    alert('Compatível apenas com telas grandes');
   }
 
+  if (localStorage.getItem('sound-on') !== null) {
+    if (sound === true) {
+      activateSound();
+      soundIcon.classList.replace('bi-volume-up-fill', 'bi-volume-mute-fill');
+    }
+
+    if (sound === false) {
+      muteSound();
+      soundIcon.classList.replace('bi-volume-mute-fill', 'bi-volume-up-fill');
+    }
+  }
+
+  let i = 0;
+
+  if (thisScores) {
+    for (let score of thisScores) {
+      highScores[i] = score;
+      i++;
+      if (i === 3) {
+        break;
+      }
+    }
+  }
+
+  updateScores();
   canvas.focus();
 });
+
+let game = setInterval(startGame, 100);
