@@ -32,6 +32,8 @@ snake[0] = {
 };
 
 /* Funções */
+const compare = (a, b) => b - a;
+
 const activateSound = () => {
   const soundIcon = document.getElementById('sound-icon');
 
@@ -82,14 +84,12 @@ const updateScore = () => {
   scoreElement.textContent = score;
 }
 
-const compare = (a, b) => b - a;
-
 const updateStorage = () => {
   localStorage.setItem('high-scores',
     JSON.stringify(highScores.sort(compare)));
 }
 
-const update = (event) => {
+const keyPress = (event) => {
   if (event.keyCode === 37 && direction !== 'right' && direction !== 'left') {
     keyLeftSound.play();
     direction = 'left';
@@ -129,17 +129,17 @@ const gameOver = () => {
   };
 
   const reload = () => {
-    document.addEventListener("keydown", () => location.reload());
+    document.addEventListener('keydown', () => location.reload());
   }
 
-  document.removeEventListener("keydown", update);
+  document.removeEventListener('keydown', keyPress);
 
-  context.fillStyle = "#00000065";
+  context.fillStyle = '#00000065';
   context.fillRect(0, 0, canvas.width, canvas.height);
 
-  context.fillStyle = "#ffffff";
-  context.font = "30px Comic Sans MS";
-  const gameOverText = "GAME OVER",
+  context.fillStyle = '#ffffff';
+  context.font = '30px Comic Sans MS';
+  const gameOverText = 'GAME OVER',
     gameOverTextWidth = context.measureText(gameOverText).width;
 
   context.fillText(
@@ -148,9 +148,9 @@ const gameOver = () => {
     canvas.height / 2 - 15
   );
 
-  context.font = "20px arial seriff";
+  context.font = '20px arial seriff';
 
-  const pressButtonText = "Pressione qualquer tecla para reiniciar o jogo",
+  const pressButtonText = 'Pressione qualquer tecla para reiniciar o jogo',
     pressButtonTextWidth = context.measureText(pressButtonText).width;
 
   context.fillText(
@@ -176,13 +176,13 @@ const gameOver = () => {
 }
 
 const startGame = () => {
-  if (snake[0].x > 15 * box && direction == 'right') snake[0].x = 0;
-  if (snake[0].x < 0 && direction == 'left') snake[0].x = 16 * box;
-  if (snake[0].y > 15 * box && direction == 'down') snake[0].y = 0;
-  if (snake[0].y < 0 && direction == 'up') snake[0].y = 16 * box;
+  if (snake[0].x > 15 * box && direction === 'right') snake[0].x = 0;
+  if (snake[0].x < 0 && direction === 'left') snake[0].x = 16 * box;
+  if (snake[0].y > 15 * box && direction === 'down') snake[0].y = 0;
+  if (snake[0].y < 0 && direction === 'up') snake[0].y = 16 * box;
 
   for (i = 1; i < snake.length; i++) {
-    if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
+    if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
       deadSound.play();
 
       let record = false;
@@ -201,7 +201,7 @@ const startGame = () => {
       }, 500);
 
       updateStorage();
-      updateScores();
+      updateScores(score);
     }
   }
 
@@ -212,40 +212,28 @@ const startGame = () => {
   let snakeX = snake[0].x;
   let snakeY = snake[0].y;
 
-  if (direction == 'right') snakeX += box;
-  if (direction == 'left') snakeX -= box;
-  if (direction == 'up') snakeY -= box;
-  if (direction == 'down') snakeY += box;
+  if (direction === 'right') snakeX += box;
+  if (direction === 'left') snakeX -= box;
+  if (direction === 'up') snakeY -= box;
+  if (direction === 'down') snakeY += box;
 
   if (snakeX != food.x || snakeY != food.y) {
     snake.pop();
   } else {
     eatSound.play();
-    score++;
-    updateScore();
+    updateScore(++score);
 
-    let fx = Math.floor(Math.random() * 15 + 1) * box;
-    let fy = Math.floor(Math.random() * 15 + 1) * box;
+    let invalidPosition, foodX, foodY;
 
-    while (true) {
-      let find = false;
+    do {
+      foodX = Math.floor(Math.random() * 15 + 1) * box;
+      foodY = Math.floor(Math.random() * 15 + 1) * box;
+      /* Se encontrar, retornará um objeto. Qualquer coisa diferente de "NaN", "undefined" e "null", é interpretado como "true" */
+      invalidPosition = snake.find(snake => (snake.x === foodX && snake.y === foodY));
+    } while (invalidPosition);
 
-      for (let i = 0; i < snake.length; i++) {
-        if (fx === snake[i].x && fy === snake[i].y) {
-          fx = Math.floor(Math.random() * 15 + 1) * box;
-          fy = Math.floor(Math.random() * 15 + 1) * box;
-          find = true;
-          break;
-        }
-      }
-
-      if (!find) {
-        break;
-      }
-    }
-
-    food.x = fx;
-    food.y = fy;
+    food.x = foodX;
+    food.y = foodY;
   }
 
   let newHead = {
@@ -263,7 +251,7 @@ soundButton.addEventListener('click', () => {
   soundIcon.classList.contains('bi-volume-mute-fill') ? muteSound() : activateSound();
 });
 
-document.addEventListener('keydown', update);
+document.addEventListener('keydown', keyPress);
 
 window.addEventListener('load', () => {
   const thisScores = JSON.parse(localStorage.getItem('high-scores'));
@@ -295,7 +283,6 @@ window.addEventListener('load', () => {
   }
 
   updateScores();
-  canvas.focus();
 });
 
 let game = setInterval(startGame, 100);
