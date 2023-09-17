@@ -60,12 +60,12 @@ const muteSound = () => {
   localStorage.setItem('sound-on', JSON.stringify(false));
 }
 
-const criarBG = () => {
+const drawBG = () => {
   context.fillStyle = 'lightgreen';
   context.fillRect(0, 0, 16 * box, 16 * box);
 }
 
-const criarCobrinha = () => {
+const drawSnake = () => {
   for (i = 0; i < snake.length; i++) {
     context.fillStyle = 'green';
     context.fillRect(snake[i].x, snake[i].y, box, box);
@@ -205,8 +205,8 @@ const startGame = () => {
     }
   }
 
-  criarBG();
-  criarCobrinha();
+  drawBG();
+  drawSnake();
   drawFood();
 
   let snakeX = snake[0].x;
