@@ -84,36 +84,28 @@ const updateScore = () => {
 
 const compare = (a, b) => b - a;
 
-const deviceIsCompatible = () => {
-  if (visualViewport.width < 900) {
-    return false;
-  }
-
-  return true;
-}
-
 const updateStorage = () => {
-  highScores.sort(compare);
-  localStorage.setItem('high-scores', JSON.stringify(highScores));
+  localStorage.setItem('high-scores',
+    JSON.stringify(highScores.sort(compare)));
 }
 
 const update = (event) => {
-  if (event.keyCode == 37 && direction != 'right') {
+  if (event.keyCode === 37 && direction !== 'right' && direction !== 'left') {
     keyLeftSound.play();
     direction = 'left';
   }
 
-  if (event.keyCode == 38 && direction != 'down') {
+  if (event.keyCode === 38 && direction !== 'down' && direction !== 'up') {
     keyUpSound.play();
     direction = 'up';
   }
 
-  if (event.keyCode == 39 && direction != 'left') {
+  if (event.keyCode === 39 && direction !== 'left' && direction !== 'right') {
     keyRightSound.play();
     direction = 'right';
   }
 
-  if (event.keyCode == 40 && direction != 'up') {
+  if (event.keyCode === 40 && direction !== 'up' && direction !== 'down') {
     keyDownSound.play();
     direction = 'down';
   }
@@ -278,19 +270,13 @@ window.addEventListener('load', () => {
   const sound = JSON.parse(localStorage.getItem('sound-on'));
   const soundIcon = document.getElementById('sound-icon')
 
-  let compatible = deviceIsCompatible();
-
-  if (!compatible) {
-    alert('Compatível apenas com telas grandes');
-  }
-
   if (localStorage.getItem('sound-on') !== null) {
-    if (sound === true) {
+    if (sound) {
       activateSound();
       soundIcon.classList.replace('bi-volume-up-fill', 'bi-volume-mute-fill');
     }
 
-    if (sound === false) {
+    if (!sound) {
       muteSound();
       soundIcon.classList.replace('bi-volume-mute-fill', 'bi-volume-up-fill');
     }
