@@ -1,3 +1,5 @@
+/* Limpo este código quando tiver tempo */
+
 const soundButton = document.getElementById('toggle-mute-sound');
 const canvas = document.getElementById('stage');
 const context = canvas.getContext('2d');
@@ -18,7 +20,6 @@ const sprites = new Image();
 sprites.src = "assets/img/snake-graphics.png";
 
 let score = 0;
-let direction = 'right';
 
 const food = {
   x: Math.floor(Math.random() * 15 + 1) * box,
@@ -66,10 +67,10 @@ const drawSnake = () => {
     y: 0,
   };
 
-  if (snake[0].direction.x === 1) spriteHeadPosition = { x: 256, y: 0 }; //head sprite right
-  if (snake[0].direction.x === -1) spriteHeadPosition = { x: 192, y: 64 }; //head sprite left
-  if (snake[0].direction.y === 1) spriteHeadPosition = { x: 256, y: 64 }; //head sprite down
-  if (snake[0].direction.y === -1) spriteHeadPosition = { x: 192, y: 0 }; //head sprite up
+  if (snake[0].direction.x === 1) spriteHeadPosition = { x: 256, y: 0 };
+  if (snake[0].direction.x === -1) spriteHeadPosition = { x: 192, y: 64 };
+  if (snake[0].direction.y === 1) spriteHeadPosition = { x: 256, y: 64 };
+  if (snake[0].direction.y === -1) spriteHeadPosition = { x: 192, y: 0 };
 
   context.drawImage(
     sprites,
@@ -83,9 +84,7 @@ const drawSnake = () => {
     box
   );
 
-  //cria calda
   if (snake.length > 1) {
-    //cria calda
     let spriteTailPosition = {
       x: 256,
       y: 128,
@@ -113,22 +112,21 @@ const drawSnake = () => {
     );
   }
 
-  // cria o resto do corpo
   for (i = 1; i < snake.length - 1; i++) {
     let haveRight = (haveLeft = haveUp = haveDown = false);
 
-    if (snake[i].direction.x > 0) haveRight = true; //tem na direita
-    if (snake[i].direction.x < 0) haveLeft = true; //tem na esquerda
-    if (snake[i].direction.y > 0) haveDown = true; //tem em baixo
-    if (snake[i].direction.y < 0) haveUp = true; // tem em cima
+    if (snake[i].direction.x > 0) haveRight = true;
+    if (snake[i].direction.x < 0) haveLeft = true;
+    if (snake[i].direction.y > 0) haveDown = true;
+    if (snake[i].direction.y < 0) haveUp = true;
 
-    let nodoAnteriorX = snake[i + 1].direction.x * -1; //inverte o valores
-    let nodoAnteriory = snake[i + 1].direction.y * -1; //inverte o valores
+    let nodoAnteriorX = snake[i + 1].direction.x * -1;
+    let nodoAnteriory = snake[i + 1].direction.y * -1;
 
-    if (nodoAnteriorX < 0) haveLeft = true; //tem na esquerda
-    if (nodoAnteriorX > 0) haveRight = true; //tem na direita
-    if (nodoAnteriory < 0) haveUp = true; //tem em cima
-    if (nodoAnteriory > 0) haveDown = true; //tem em baixo
+    if (nodoAnteriorX < 0) haveLeft = true;
+    if (nodoAnteriorX > 0) haveRight = true;
+    if (nodoAnteriory < 0) haveUp = true;
+    if (nodoAnteriory > 0) haveDown = true;
 
     let spriteBodyPosition = {
       x: 64,
@@ -158,15 +156,15 @@ const drawSnake = () => {
 
 const drawFood = () => {
   context.drawImage(
-    sprites, //spritesheet
+    sprites,
     0,
-    192, // x = 0 y = 192 (64+64+64) posição inicial do recorte
+    192,
     64,
-    64, // tamanho do recorte no nosso spritesheet
+    64,
     food.x,
-    food.y, //posição da comida
+    food.y,
     box,
-    box // tamanho da comida
+    box
   );
 }
 
@@ -181,29 +179,43 @@ const updateStorage = () => {
     JSON.stringify(highScores.sort(compare)));
 }
 
+const KEY_CODES = {
+  LEFT: 37,
+  UP: 38,
+  RIGHT: 39,
+  DOWN: 40,
+};
+
 const keyPress = (event) => {
   const head = snake[0];
 
-  if (event.keyCode === 37 && head.direction.x !== 1 && head.direction.x !== -1) {
-    head.direction = { x: -1, y: 0 }; //left
-    keyLeftSound.play();
+  switch (event.keyCode) {
+    case KEY_CODES.LEFT:
+      if (head.direction.x !== 1 && head.direction.x !== -1) {
+        head.direction = { x: -1, y: 0 };
+        keyLeftSound.play();
+      }
+      break;
+    case KEY_CODES.UP:
+      if (head.direction.y !== 1 && head.direction.y !== -1) {
+        head.direction = { x: 0, y: -1 };
+        keyUpSound.play();
+      }
+      break;
+    case KEY_CODES.RIGHT:
+      if (head.direction.x !== -1 && head.direction.x !== 1) {
+        head.direction = { x: 1, y: 0 };
+        keyRightSound.play();
+      }
+      break;
+    case KEY_CODES.DOWN:
+      if (head.direction.y !== -1 && head.direction.y !== 1) {
+        head.direction = { x: 0, y: 1 };
+        keyDownSound.play();
+      }
+      break;
   }
-
-  if (event.keyCode === 38 && head.direction.y !== 1 && head.direction.y !== -1) {
-    head.direction = { x: 0, y: -1 }; //up
-    keyUpSound.play();
-  }
-
-  if (event.keyCode === 39 && head.direction.x !== -1 && head.direction.x !== 1) {
-    head.direction = { x: 1, y: 0 }; //right
-    keyRightSound.play();
-  }
-
-  if (event.keyCode === 40 && head.direction.y !== -1 && head.direction.y !== 1) {
-    head.direction = { x: 0, y: 1 }; //down
-    keyDownSound.play();
-  }
-}
+};
 
 const updateScores = () => {
   const firstPlaceScore = document.getElementById('first-place-score');
