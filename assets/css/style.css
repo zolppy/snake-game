@@ -86,3 +86,39 @@ button:hover {
   border-radius: 20px;
   box-shadow: 2px 7px 15px rgba(0, 0, 0, .63);
 }
+
+#title {
+  animation-name: 'title';
+  animation-duration: 25s;
+  animation-iteration-count: infinite;
+  animation-delay: .2s;
+}
+
+@keyframes title {
+  0%   { color:black; }
+  2%   { color:beige; }
+  6%   { color:cadetblue; }
+  8%   { color:darkgrey; }
+  10%  { color:firebrick; }
+  12%  { color:hotpink; }
+  14%  { color:gold; }
+  16%  { color:indigo; }
+  18%  { color:khaki; }
+  20%  { color:lightpink; }
+  25%  { color:magenta; }
+  30%  { color:lawngreen; }
+  35%  { color:orangered; }
+  40%  { color:palegreen; }
+  45%  { color:red; }
+  50%  { color:sienna; }
+  60%  { color:teal; }
+  65%  { color:violet; }
+  70%  { color:lime; }
+  80%  { color:yellowgreen; }
+  81%  { color:maroon; }
+  85%  { color:mediumslateblue; }
+  90%  { color:palegreen; }
+  91%  { color:powderblue; }
+  99%  { color:rosybrown; }
+  100% { color:cyan; }
+}
