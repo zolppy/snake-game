@@ -8,23 +8,21 @@ const keyRightSound = new Audio('assets/audio/right.mp3');
 const keyLeftSound = new Audio('assets/audio/left.mp3');
 const keyDownSound = new Audio('assets/audio/down.mp3');
 const highScores = [0, 0, 0];
-const snake = [];
+let box = 32;
+let snake = [
+  { x: 8 * box, y: 8 * box, direction: { x: 1, y: 0 } },
+  { x: 16 * box, y: 16 * box, direction: { x: 1, y: 0 } },
+];
+
+const sprites = new Image();
+sprites.src = "assets/img/snake-graphics.png";
 
 let score = 0;
-let box = 32;
 let direction = 'right';
 
 const food = {
   x: Math.floor(Math.random() * 15 + 1) * box,
   y: Math.floor(Math.random() * 15 + 1) * box
-};
-
-const foodImg = new Image();
-foodImg.src = 'assets/img/food.png';
-
-snake[0] = {
-  x: 8 * box,
-  y: 8 * box
 };
 
 const compare = (a, b) => b - a;
@@ -63,14 +61,113 @@ const drawBG = () => {
 }
 
 const drawSnake = () => {
-  for (i = 0; i < snake.length; i++) {
-    context.fillStyle = 'green';
-    context.fillRect(snake[i].x, snake[i].y, box, box);
+  let spriteHeadPosition = {
+    x: 254,
+    y: 0,
+  };
+
+  if (snake[0].direction.x === 1) spriteHeadPosition = { x: 256, y: 0 }; //head sprite right
+  if (snake[0].direction.x === -1) spriteHeadPosition = { x: 192, y: 64 }; //head sprite left
+  if (snake[0].direction.y === 1) spriteHeadPosition = { x: 256, y: 64 }; //head sprite down
+  if (snake[0].direction.y === -1) spriteHeadPosition = { x: 192, y: 0 }; //head sprite up
+
+  context.drawImage(
+    sprites,
+    spriteHeadPosition.x,
+    spriteHeadPosition.y,
+    64,
+    64,
+    snake[0].x,
+    snake[0].y,
+    box,
+    box
+  );
+
+  //cria calda
+  if (snake.length > 1) {
+    //cria calda
+    let spriteTailPosition = {
+      x: 256,
+      y: 128,
+    };
+
+    if (snake[snake.length - 1].direction.x > 0)
+      spriteTailPosition = { x: 256, y: 128 };
+    if (snake[snake.length - 1].direction.x < 0)
+      spriteTailPosition = { x: 192, y: 192 };
+    if (snake[snake.length - 1].direction.y > 0)
+      spriteTailPosition = { x: 256, y: 192 };
+    if (snake[snake.length - 1].direction.y < 0)
+      spriteTailPosition = { x: 192, y: 128 };
+
+    context.drawImage(
+      sprites,
+      spriteTailPosition.x,
+      spriteTailPosition.y,
+      64,
+      64,
+      snake[snake.length - 1].x,
+      snake[snake.length - 1].y,
+      box,
+      box
+    );
+  }
+
+  // cria o resto do corpo
+  for (i = 1; i < snake.length - 1; i++) {
+    let haveRight = (haveLeft = haveUp = haveDown = false);
+
+    if (snake[i].direction.x > 0) haveRight = true; //tem na direita
+    if (snake[i].direction.x < 0) haveLeft = true; //tem na esquerda
+    if (snake[i].direction.y > 0) haveDown = true; //tem em baixo
+    if (snake[i].direction.y < 0) haveUp = true; // tem em cima
+
+    let nodoAnteriorX = snake[i + 1].direction.x * -1; //inverte o valores
+    let nodoAnteriory = snake[i + 1].direction.y * -1; //inverte o valores
+
+    if (nodoAnteriorX < 0) haveLeft = true; //tem na esquerda
+    if (nodoAnteriorX > 0) haveRight = true; //tem na direita
+    if (nodoAnteriory < 0) haveUp = true; //tem em cima
+    if (nodoAnteriory > 0) haveDown = true; //tem em baixo
+
+    let spriteBodyPosition = {
+      x: 64,
+      y: 0,
+    };
+
+    if (haveLeft && haveRight) spriteBodyPosition = { x: 64, y: 0 };
+    if (haveUp && haveDown) spriteBodyPosition = { x: 128, y: 64 };
+    if (haveLeft && haveDown) spriteBodyPosition = { x: 128, y: 0 };
+    if (haveLeft && haveUp) spriteBodyPosition = { x: 128, y: 128 };
+    if (haveRight && haveDown) spriteBodyPosition = { x: 0, y: 0 };
+    if (haveRight && haveUp) spriteBodyPosition = { x: 0, y: 64 };
+
+    context.drawImage(
+      sprites,
+      spriteBodyPosition.x,
+      spriteBodyPosition.y,
+      64,
+      64,
+      snake[i].x,
+      snake[i].y,
+      box,
+      box
+    );
   }
 }
 
 const drawFood = () => {
-  context.drawImage(foodImg, food.x, food.y);
+  context.drawImage(
+    sprites, //spritesheet
+    0,
+    192, // x = 0 y = 192 (64+64+64) posição inicial do recorte
+    64,
+    64, // tamanho do recorte no nosso spritesheet
+    food.x,
+    food.y, //posição da comida
+    box,
+    box // tamanho da comida
+  );
 }
 
 const updateScore = () => {
@@ -85,24 +182,26 @@ const updateStorage = () => {
 }
 
 const keyPress = (event) => {
-  if (event.keyCode === 37 && direction !== 'right' && direction !== 'left') {
+  const head = snake[0];
+
+  if (event.keyCode === 37 && head.direction.x !== 1 && head.direction.x !== -1) {
+    head.direction = { x: -1, y: 0 }; //left
     keyLeftSound.play();
-    direction = 'left';
   }
 
-  if (event.keyCode === 38 && direction !== 'down' && direction !== 'up') {
+  if (event.keyCode === 38 && head.direction.y !== 1 && head.direction.y !== -1) {
+    head.direction = { x: 0, y: -1 }; //up
     keyUpSound.play();
-    direction = 'up';
   }
 
-  if (event.keyCode === 39 && direction !== 'left' && direction !== 'right') {
+  if (event.keyCode === 39 && head.direction.x !== -1 && head.direction.x !== 1) {
+    head.direction = { x: 1, y: 0 }; //right
     keyRightSound.play();
-    direction = 'right';
   }
 
-  if (event.keyCode === 40 && direction !== 'up' && direction !== 'down') {
+  if (event.keyCode === 40 && head.direction.y !== -1 && head.direction.y !== 1) {
+    head.direction = { x: 0, y: 1 }; //down
     keyDownSound.play();
-    direction = 'down';
   }
 }
 
@@ -170,14 +269,25 @@ const gameOver = () => {
   setTimeout(reload, 1000);
 }
 
-const startGame = () => {
-  if (snake[0].x > 15 * box && direction === 'right') snake[0].x = 0;
-  if (snake[0].x < 0 && direction === 'left') snake[0].x = 16 * box;
-  if (snake[0].y > 15 * box && direction === 'down') snake[0].y = 0;
-  if (snake[0].y < 0 && direction === 'up') snake[0].y = 16 * box;
+function startGame() {
+  if (snake[0].x > 15 * box && snake[0].direction.x == 1) snake[0].x = 0;
+  if (snake[0].x > 15 * box && snake[0].direction.y == -1) snake[0].x = 0;
+  if (snake[0].x > 15 * box && snake[0].direction.y == 1) snake[0].x = 0;
+
+  if (snake[0].x < 0 && snake[0].direction.x == -1) snake[0].x = 15 * box;
+  if (snake[0].x < 0 && snake[0].direction.y == -1) snake[0].x = 15 * box;
+  if (snake[0].x < 0 && snake[0].direction.y == 1) snake[0].x = 15 * box;
+
+  if (snake[0].y > 15 * box && snake[0].direction.y == 1) snake[0].y = 0;
+  if (snake[0].y > 15 * box && snake[0].direction.x == 1) snake[0].y = 0;
+  if (snake[0].y > 15 * box && snake[0].direction.x == -1) snake[0].y = 0;
+
+  if (snake[0].y < 0 && snake[0].direction.y == -1) snake[0].y = 15 * box;
+  if (snake[0].y < 0 && snake[0].direction.x == 1) snake[0].y = 15 * box;
+  if (snake[0].y < 0 && snake[0].direction.x == -1) snake[0].y = 15 * box;
 
   for (i = 1; i < snake.length; i++) {
-    if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
+    if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
       deadSound.play();
 
       let record = false;
@@ -191,7 +301,7 @@ const startGame = () => {
       }
 
       gameOver();
-      setTimeout(() => {
+      setTimeout(function () {
         gameOver();
       }, 500);
 
@@ -207,17 +317,17 @@ const startGame = () => {
   let snakeX = snake[0].x;
   let snakeY = snake[0].y;
 
-  if (direction === 'right') snakeX += box;
-  if (direction === 'left') snakeX -= box;
-  if (direction === 'up') snakeY -= box;
-  if (direction === 'down') snakeY += box;
+  if (snake[0].direction.x == 1) snakeX += box;
+  if (snake[0].direction.x == -1) snakeX -= box;
+  if (snake[0].direction.y == -1) snakeY -= box;
+  if (snake[0].direction.y == 1) snakeY += box;
 
   if (snakeX != food.x || snakeY != food.y) {
     snake.pop();
   } else {
-    eatSound.play();
     score++;
     updateScore();
+    eatSound.play();
 
     let invalidPosition, foodX, foodY;
 
@@ -234,8 +344,12 @@ const startGame = () => {
 
   let newHead = {
     x: snakeX,
-    y: snakeY
-  }
+    y: snakeY,
+    direction: {
+      x: snake[0].direction.x,
+      y: snake[0].direction.y,
+    },
+  };
 
   snake.unshift(newHead);
 }
