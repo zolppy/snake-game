@@ -1,12 +1,10 @@
 @charset "UTF-8";
 
 :root {
-  --bg-color: lightgreen;
   /* #efefef é mais suave que branco absoluto: #fff */
   --default-bg-color: #efefef;
   /* #333 é mais suave que preto absoluto: #000 */
-  --font-color: #333;
-  --border-color: #333;
+  --default-font-color: #333;
   --hover-bg-color: #918e8e;
 }
 
@@ -36,13 +34,15 @@ body {
 }
 
 #status-container {
-  border: 2px solid var(--border-color);
-  margin-right: 20px;
-  background-color: var(--bg-color);
-  color: var(--font-color);
-  padding: 20px;
+  background-color: lightgreen;
+  color: var(--default-font-color);
+  padding: 20px 10px;
+  margin-right: 7px;
   line-height: 2rem;
   width: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 #score-container,
@@ -65,9 +65,12 @@ body {
 }
 
 button {
+  /* Deve ser um quadrado, para que seja aplicado o formato de círculo */
+  width: 44px;
+  height: 44px;
   /* Sem borda */
   border: none;
-  /* Formato de círculo ou próximo a isso */
+  /* Formato de círculo*/
   border-radius: 50%;
   /* Cor de fundo igual o do elemento pai / sem cor de fundo */
   background-color: transparent;
@@ -78,6 +81,8 @@ button:hover {
   background-color: var(--hover-bg-color);
 }
 
-#stage {
-  border: 2px solid var(--border-color);
+#stage,
+#status-container {
+  border-radius: 20px;
+  box-shadow: 2px 7px 15px rgba(0, 0, 0, .63);
 }
