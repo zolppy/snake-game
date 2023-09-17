@@ -61,6 +61,7 @@ body {
 /* 30px de tamanho de fonte para todos os ícones do Bootstrap Icons */
 .bi {
   font-size: 30px;
+  color: rgb(1, 66, 1);
 }
 
 button {

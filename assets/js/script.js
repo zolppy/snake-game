@@ -1,16 +1,12 @@
-/* Mapeamento */
 const soundButton = document.getElementById('toggle-mute-sound');
 const canvas = document.getElementById('stage');
 const context = canvas.getContext('2d');
-
-/* Variáveis */
 const deadSound = new Audio('assets/audio/dead.mp3');
 const eatSound = new Audio('assets/audio/eat.mp3');
 const keyUpSound = new Audio('assets/audio/up.mp3');
 const keyRightSound = new Audio('assets/audio/right.mp3');
 const keyLeftSound = new Audio('assets/audio/left.mp3');
 const keyDownSound = new Audio('assets/audio/down.mp3');
-
 const highScores = [0, 0, 0];
 const snake = [];
 
@@ -31,7 +27,6 @@ snake[0] = {
   y: 8 * box
 };
 
-/* Funções */
 const compare = (a, b) => b - a;
 
 const activateSound = () => {
@@ -201,7 +196,7 @@ const startGame = () => {
       }, 500);
 
       updateStorage();
-      updateScores(score);
+      updateScores();
     }
   }
 
@@ -221,7 +216,8 @@ const startGame = () => {
     snake.pop();
   } else {
     eatSound.play();
-    updateScore(++score);
+    score++;
+    updateScore();
 
     let invalidPosition, foodX, foodY;
 
@@ -244,7 +240,6 @@ const startGame = () => {
   snake.unshift(newHead);
 }
 
-/* Eventos */
 soundButton.addEventListener('click', () => {
   const soundIcon = document.getElementById('sound-icon');
 
