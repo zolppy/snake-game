@@ -4,12 +4,12 @@ const canvas = document.getElementById('stage');
 const context = canvas.getContext('2d');
 
 /* Variáveis */
-const deadSound = new Audio('audio/dead.mp3');
-const eatSound = new Audio('audio/eat.mp3');
-const keyUpSound = new Audio('audio/up.mp3');
-const keyRightSound = new Audio('audio/right.mp3');
-const keyLeftSound = new Audio('audio/left.mp3');
-const keyDownSound = new Audio('audio/down.mp3');
+const deadSound = new Audio('assets/audio/dead.mp3');
+const eatSound = new Audio('assets/audio/eat.mp3');
+const keyUpSound = new Audio('assets/audio/up.mp3');
+const keyRightSound = new Audio('assets/audio/right.mp3');
+const keyLeftSound = new Audio('assets/audio/left.mp3');
+const keyDownSound = new Audio('assets/audio/down.mp3');
 
 const highScores = [0, 0, 0];
 const snake = [];
@@ -24,7 +24,7 @@ const food = {
 };
 
 const foodImg = new Image();
-foodImg.src = 'img/food.png';
+foodImg.src = 'assets/img/food.png';
 
 snake[0] = {
   x: 8 * box,

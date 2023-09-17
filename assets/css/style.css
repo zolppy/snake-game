@@ -11,7 +11,7 @@
 }
 
 body {
-  background-image: url('img/bg.jpg');
+  background-image: url('../img/bg.jpg');
   background-size: cover;
   font-family: 'Times New Roman', Times, serif;
   color: var(--default-bg-color);
