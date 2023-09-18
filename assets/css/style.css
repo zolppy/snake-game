@@ -107,7 +107,7 @@ body {
 }
 
 #title {
-  animation-name: 'title';
+  animation-name: title;
   animation-duration: 25s;
   animation-iteration-count: infinite;
   animation-delay: .2s;
