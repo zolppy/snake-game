@@ -34,8 +34,8 @@ body {
 }
 
 #status-container {
-  background-color: lightgreen;
-  color: var(--default-font-color);
+  background-color: var(--default-font-color);
+  font-weight: bold;
   padding: 20px 10px;
   margin-right: 7px;
   line-height: 2rem;
@@ -45,9 +45,25 @@ body {
   justify-content: center;
 }
 
+#score-container > i {
+  color: rgb(211, 6, 6);
+}
+
 #score-container,
 #high-scores-container {
   margin-bottom: 80px;
+}
+
+#first-place-container > i {
+  color: #CD7F32;
+}
+
+#second-place-container > i {
+  color: #C0C0C0;
+}
+
+#third-place-container > i {
+  color: #DB9370;
 }
 
 #score-container,
@@ -61,10 +77,9 @@ body {
 /* 30px de tamanho de fonte para todos os ícones do Bootstrap Icons */
 .bi {
   font-size: 30px;
-  color: rgb(1, 66, 1);
 }
 
-button {
+#toggle-mute-sound {
   /* Deve ser um quadrado, para que seja aplicado o formato de círculo */
   width: 44px;
   height: 44px;
@@ -76,9 +91,13 @@ button {
   background-color: transparent;
 }
 
-button:hover {
+#toggle-mute-sound:hover {
   cursor: pointer;
   background-color: var(--hover-bg-color);
+}
+
+#sound-icon {
+  color: cyan;
 }
 
 #stage,
