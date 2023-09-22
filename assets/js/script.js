@@ -1,4 +1,5 @@
 /* Limpo este código quando tiver tempo */
+/* Adicionar botão de resetar high scores */
 
 const soundButton = document.getElementById('toggle-mute-sound');
 const canvas = document.getElementById('stage');
