@@ -1,8 +1,8 @@
 /* Limpo este código quando tiver tempo */
 /* Adicionar botão de resetar high scores */
 
-const soundButton = document.getElementById('toggle-mute-sound');
-const canvas = document.getElementById('stage');
+const soundButton = document.getElementById('snake-game__toggle-mute-sound');
+const canvas = document.getElementById('snake-game__stage');
 const context = canvas.getContext('2d');
 const deadSound = new Audio('assets/audio/dead.mp3');
 const eatSound = new Audio('assets/audio/eat.mp3');
@@ -30,7 +30,7 @@ const food = {
 const compare = (a, b) => b - a;
 
 const activateSound = () => {
-  const soundIcon = document.getElementById('sound-icon');
+  const soundIcon = document.getElementById('snake-game__sound-icon');
 
   deadSound.muted = false;
   eatSound.muted = false;
@@ -44,7 +44,7 @@ const activateSound = () => {
 }
 
 const muteSound = () => {
-  const soundIcon = document.getElementById('sound-icon');
+  const soundIcon = document.getElementById('snake-game__sound-icon');
 
   deadSound.muted = true;
   eatSound.muted = true;
@@ -170,7 +170,7 @@ const drawFood = () => {
 }
 
 const updateScore = () => {
-  const scoreElement = document.getElementById('score');
+  const scoreElement = document.getElementById('snake-game__score');
 
   scoreElement.textContent = score;
 }
@@ -219,9 +219,9 @@ const keyPress = (event) => {
 };
 
 const updateScores = () => {
-  const firstPlaceScore = document.getElementById('first-place-score');
-  const secondPlaceScore = document.getElementById('second-place-score');
-  const thirdPlaceScore = document.getElementById('third-place-score');
+  const firstPlaceScore = document.getElementById('snake-game__first-place-score');
+  const secondPlaceScore = document.getElementById('snake-game__second-place-score');
+  const thirdPlaceScore = document.getElementById('snake-game__third-place-score');
 
   firstPlaceScore.textContent = highScores[0];
   secondPlaceScore.textContent = highScores[1];
@@ -368,7 +368,7 @@ function startGame() {
 }
 
 soundButton.addEventListener('click', () => {
-  const soundIcon = document.getElementById('sound-icon');
+  const soundIcon = document.getElementById('snake-game__sound-icon');
 
   soundIcon.classList.contains('bi-volume-mute-fill') ? muteSound() : activateSound();
 });
@@ -378,7 +378,7 @@ document.addEventListener('keydown', keyPress);
 window.addEventListener('load', () => {
   const thisScores = JSON.parse(localStorage.getItem('high-scores'));
   const sound = JSON.parse(localStorage.getItem('sound-on'));
-  const soundIcon = document.getElementById('sound-icon')
+  const soundIcon = document.getElementById('snake-game__sound-icon')
 
   if (localStorage.getItem('sound-on') !== null) {
     if (sound) {
