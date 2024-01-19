@@ -41,7 +41,7 @@ const activateSound = () => {
   keyDownSound.muted = false;
 
   soundIcon.src = soundOff;
-  soundIcon.alt = "imagem em preto e branco que representa som desativado";
+  soundIcon.alt = "ícone de cor azul que representa som desativado";
   soundIcon.classList.replace("sound-on", "sound-off");
 
   localStorage.setItem("sound-on", JSON.stringify(true));
@@ -59,7 +59,7 @@ const muteSound = () => {
   keyDownSound.muted = true;
 
   soundIcon.src = soundOn;
-  soundIcon.alt = "imagem em preto e branco que representa som ativado";
+  soundIcon.alt = "ícone de cor azul que representa som ativado";
   soundIcon.classList.replace("sound-off", "sound-on");
 
   localStorage.setItem("sound-on", JSON.stringify(false));
@@ -395,14 +395,14 @@ window.addEventListener("load", () => {
     if (sound) {
       activateSound();
       soundIcon.src = soundOff;
-      soundIcon.alt = "imagem em preto e branco que representa som desativado";
+      soundIcon.alt = "ícone de cor azul que representa som desativado";
       soundIcon.classList.replace("sound-on", "sound-off");
     }
 
     if (!sound) {
       muteSound();
       soundIcon.src = soundOn;
-      soundIcon.alt = "imagem em preto e branco que representa som ativado";
+      soundIcon.alt = "ícone de cor azul que representa som ativado";
       soundIcon.classList.replace("sound-off", "sound-on");
     }
   }
