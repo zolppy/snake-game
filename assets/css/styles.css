@@ -5,13 +5,9 @@ html {
 }
 
 :root {
-  --gold-color: #Cd7f32;
-  --silver-color: #c0c0c0;
-  --bronze-color: #db9370;
   --hover-bg-color: #918e8e;
   --soft-white: #f5f5f5;
   --dark-green: #024202;
-  --apple-color: #a00;
 }
 
 * {
@@ -45,28 +41,18 @@ body {
   justify-content: space-around;
 }
 
-#score-container > i {
-  color: var(--apple-color);
+#apple,
+.trophy {
+  width: 30px;
 }
 
-#apple {
-  font-size: 1.7rem;
-}
-
-#first-place-container > i {
-  color: var(--gold-color);
-}
-
-#second-place-container > i {
-  color: var(--silver-color);
-}
-
-#third-place-container > i {
-  color: var(--bronze-color);
+#sound {
+  width: 40px;
 }
 
 #score-container,
 .high-score {
+  line-height: 2.3;
   display: flex;
   align-items: center;
   gap: 0 15%;

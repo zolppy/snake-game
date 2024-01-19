@@ -1,15 +1,15 @@
 /* Limpo este código quando tiver tempo */
 /* Adicionar botão de resetar high scores */
 
-const soundButton = document.getElementById('toggle-mute-sound');
-const canvas = document.getElementById('stage');
-const context = canvas.getContext('2d');
-const deadSound = new Audio('assets/audio/dead.mp3');
-const eatSound = new Audio('assets/audio/eat.mp3');
-const keyUpSound = new Audio('assets/audio/up.mp3');
-const keyRightSound = new Audio('assets/audio/right.mp3');
-const keyLeftSound = new Audio('assets/audio/left.mp3');
-const keyDownSound = new Audio('assets/audio/down.mp3');
+const soundButton = document.getElementById("toggle-mute-sound");
+const canvas = document.getElementById("stage");
+const context = canvas.getContext("2d");
+const deadSound = new Audio("assets/audio/dead.mp3");
+const eatSound = new Audio("assets/audio/eat.mp3");
+const keyUpSound = new Audio("assets/audio/up.mp3");
+const keyRightSound = new Audio("assets/audio/right.mp3");
+const keyLeftSound = new Audio("assets/audio/left.mp3");
+const keyDownSound = new Audio("assets/audio/down.mp3");
 const highScores = [0, 0, 0];
 let box = 32;
 let snake = [
@@ -30,8 +30,9 @@ const food = {
 const compare = (a, b) => b - a;
 
 const activateSound = () => {
-  const soundIcon = document.getElementById('sound-icon');
-
+  const soundIcon = document.querySelector("#sound");
+  const soundOff = "assets/img/icons/sound-off.svg";
+  
   deadSound.muted = false;
   eatSound.muted = false;
   keyUpSound.muted = false;
@@ -39,13 +40,17 @@ const activateSound = () => {
   keyLeftSound.muted = false;
   keyDownSound.muted = false;
 
-  soundIcon.classList.replace('bi-volume-up-fill', 'bi-volume-mute-fill');
-  localStorage.setItem('sound-on', JSON.stringify(true));
+  soundIcon.src = soundOff;
+  soundIcon.alt = "imagem em preto e branco que representa som desativado";
+  soundIcon.classList.replace("sound-on", "sound-off");
+
+  localStorage.setItem("sound-on", JSON.stringify(true));
 }
 
 const muteSound = () => {
-  const soundIcon = document.getElementById('sound-icon');
-
+  const soundIcon = document.querySelector("#sound")
+  const soundOn = "assets/img/icons/sound-on.svg";
+  
   deadSound.muted = true;
   eatSound.muted = true;
   keyUpSound.muted = true;
@@ -53,12 +58,15 @@ const muteSound = () => {
   keyLeftSound.muted = true;
   keyDownSound.muted = true;
 
-  soundIcon.classList.replace('bi-volume-mute-fill', 'bi-volume-up-fill');
-  localStorage.setItem('sound-on', JSON.stringify(false));
+  soundIcon.src = soundOn;
+  soundIcon.alt = "imagem em preto e branco que representa som ativado";
+  soundIcon.classList.replace("sound-off", "sound-on");
+
+  localStorage.setItem("sound-on", JSON.stringify(false));
 }
 
 const drawBG = () => {
-  context.fillStyle = 'lightgreen';
+  context.fillStyle = "lightgreen";
   context.fillRect(0, 0, 16 * box, 16 * box);
 }
 
@@ -170,13 +178,13 @@ const drawFood = () => {
 }
 
 const updateScore = () => {
-  const scoreElement = document.getElementById('score');
+  const scoreElement = document.getElementById("score");
 
   scoreElement.textContent = score;
 }
 
 const updateStorage = () => {
-  localStorage.setItem('high-scores',
+  localStorage.setItem("high-scores",
     JSON.stringify(highScores.sort(compare)));
 }
 
@@ -219,9 +227,9 @@ const keyPress = (event) => {
 };
 
 const updateScores = () => {
-  const firstPlaceScore = document.getElementById('first-place-score');
-  const secondPlaceScore = document.getElementById('second-place-score');
-  const thirdPlaceScore = document.getElementById('third-place-score');
+  const firstPlaceScore = document.getElementById("first-place-score");
+  const secondPlaceScore = document.getElementById("second-place-score");
+  const thirdPlaceScore = document.getElementById("third-place-score");
 
   firstPlaceScore.textContent = highScores[0];
   secondPlaceScore.textContent = highScores[1];
@@ -236,17 +244,17 @@ const gameOver = () => {
   };
 
   const reload = () => {
-    document.addEventListener('keydown', () => location.reload());
+    document.addEventListener("keydown", () => location.reload());
   }
 
-  document.removeEventListener('keydown', keyPress);
+  document.removeEventListener("keydown", keyPress);
 
-  context.fillStyle = '#00000065';
+  context.fillStyle = "#00000065";
   context.fillRect(0, 0, canvas.width, canvas.height);
 
-  context.fillStyle = '#ffffff';
-  context.font = '30px Comic Sans MS';
-  const gameOverText = 'GAME OVER',
+  context.fillStyle = "#ffffff";
+  context.font = "30px Comic Sans MS";
+  const gameOverText = "GAME OVER",
     gameOverTextWidth = context.measureText(gameOverText).width;
 
   context.fillText(
@@ -255,9 +263,9 @@ const gameOver = () => {
     canvas.height / 2 - 15
   );
 
-  context.font = '20px arial seriff';
+  context.font = "20px arial seriff";
 
-  const pressButtonText = 'Pressione qualquer tecla para reiniciar o jogo',
+  const pressButtonText = "Pressione qualquer tecla para reiniciar o jogo",
     pressButtonTextWidth = context.measureText(pressButtonText).width;
 
   context.fillText(
@@ -268,7 +276,7 @@ const gameOver = () => {
 
   for (let i = 0; i < 3; i++) {
     if (score >= highScores[i]) {
-      const recordText = 'Sua pontuação é uma das maiores!'
+      const recordText = "Sua pontuação é uma das maiores!"
       const recordTextWidth = context.measureText(recordText).width;
       context.fillText(
         recordText,
@@ -367,28 +375,35 @@ function startGame() {
   snake.unshift(newHead);
 }
 
-soundButton.addEventListener('click', () => {
-  const soundIcon = document.getElementById('sound-icon');
+soundButton.addEventListener("click", () => {
+  const soundIcon = document.querySelector("#sound");
 
-  soundIcon.classList.contains('bi-volume-mute-fill') ? muteSound() : activateSound();
+  soundIcon.classList.contains("sound-off") ? muteSound() : activateSound();
 });
 
-document.addEventListener('keydown', keyPress);
+document.addEventListener("keydown", keyPress);
 
-window.addEventListener('load', () => {
-  const thisScores = JSON.parse(localStorage.getItem('high-scores'));
-  const sound = JSON.parse(localStorage.getItem('sound-on'));
-  const soundIcon = document.getElementById('sound-icon')
+window.addEventListener("load", () => {
+  const thisScores = JSON.parse(localStorage.getItem("high-scores"));
+  const sound = JSON.parse(localStorage.getItem("sound-on"));
+  const soundIcon = document.querySelector("#sound");
 
-  if (localStorage.getItem('sound-on') !== null) {
+  const soundOn = "assets/img/icons/sound-on.svg";
+  const soundOff = "assets/img/icons/sound-off.svg";
+
+  if (localStorage.getItem("sound-on") !== null) {
     if (sound) {
       activateSound();
-      soundIcon.classList.replace('bi-volume-up-fill', 'bi-volume-mute-fill');
+      soundIcon.src = soundOff;
+      soundIcon.alt = "imagem em preto e branco que representa som desativado";
+      soundIcon.classList.replace("sound-on", "sound-off");
     }
 
     if (!sound) {
       muteSound();
-      soundIcon.classList.replace('bi-volume-mute-fill', 'bi-volume-up-fill');
+      soundIcon.src = soundOn;
+      soundIcon.alt = "imagem em preto e branco que representa som ativado";
+      soundIcon.classList.replace("sound-off", "sound-on");
     }
   }
 
