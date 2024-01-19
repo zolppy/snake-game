@@ -1,8 +1,7 @@
-/* Limpo este código quando tiver tempo */
 /* Adicionar botão de resetar high scores */
 
-const soundButton = document.getElementById("toggle-mute-sound");
-const canvas = document.getElementById("stage");
+const soundButton = document.querySelector("#toggle-mute-sound");
+const canvas = document.querySelector("#stage");
 const context = canvas.getContext("2d");
 const deadSound = new Audio("assets/audio/dead.mp3");
 const eatSound = new Audio("assets/audio/eat.mp3");
@@ -12,7 +11,7 @@ const keyLeftSound = new Audio("assets/audio/left.mp3");
 const keyDownSound = new Audio("assets/audio/down.mp3");
 const highScores = [0, 0, 0];
 let box = 32;
-let snake = [
+const snake = [
   { x: 8 * box, y: 8 * box, direction: { x: 1, y: 0 } },
   { x: 16 * box, y: 16 * box, direction: { x: 1, y: 0 } },
 ];
@@ -70,97 +69,73 @@ const drawBG = () => {
   context.fillRect(0, 0, 16 * box, 16 * box);
 }
 
-const drawSnake = () => {
-  let spriteHeadPosition = {
-    x: 254,
-    y: 0,
-  };
-
-  if (snake[0].direction.x === 1) spriteHeadPosition = { x: 256, y: 0 };
-  if (snake[0].direction.x === -1) spriteHeadPosition = { x: 192, y: 64 };
-  if (snake[0].direction.y === 1) spriteHeadPosition = { x: 256, y: 64 };
-  if (snake[0].direction.y === -1) spriteHeadPosition = { x: 192, y: 0 };
-
+function drawSnakeHead() {
+  const spriteHeadPosition =
+    ((snake[0].direction.x === 1)  && { x: 256, y: 0 })  ||
+    ((snake[0].direction.x === -1) && { x: 192, y: 64 }) ||
+    ((snake[0].direction.y === 1)  && { x: 256, y: 64 }) ||
+    ((snake[0].direction.y === -1) && { x: 192, y: 0 });
+  
   context.drawImage(
     sprites,
-    spriteHeadPosition.x,
-    spriteHeadPosition.y,
-    64,
-    64,
-    snake[0].x,
-    snake[0].y,
-    box,
-    box
+    spriteHeadPosition.x, spriteHeadPosition.y,
+    64, 64,
+    snake[0].x, snake[0].y,
+    box, box
   );
+}
 
-  if (snake.length > 1) {
-    let spriteTailPosition = {
-      x: 256,
-      y: 128,
-    };
-
-    if (snake[snake.length - 1].direction.x > 0)
-      spriteTailPosition = { x: 256, y: 128 };
-    if (snake[snake.length - 1].direction.x < 0)
-      spriteTailPosition = { x: 192, y: 192 };
-    if (snake[snake.length - 1].direction.y > 0)
-      spriteTailPosition = { x: 256, y: 192 };
-    if (snake[snake.length - 1].direction.y < 0)
-      spriteTailPosition = { x: 192, y: 128 };
-
+function drawSnakeBody() {
+  for (let i = 1, total = snake.length - 1; i < total; i++) {
+    const prevXNode = snake[i + 1].direction.x * -1;
+    const prevYNode = snake[i + 1].direction.y * -1;
+  
+    let right = (snake[i].direction.x > 0) || (prevXNode > 0);
+    let left  = (snake[i].direction.x < 0) || (prevXNode < 0);
+    let down  = (snake[i].direction.y > 0) || (prevYNode > 0);
+    let up    = (snake[i].direction.y < 0) || (prevYNode < 0);
+  
+    const spriteBodyPosition =
+      ((left  && right) && { x: 64, y: 0 })    ||
+      ((up    && down)  && { x: 128, y: 64 })  ||
+      ((left  && down)  && { x: 128, y: 0 })   ||
+      ((left  && up)    && { x: 128, y: 128 }) ||
+      ((right && down)  && { x: 0, y: 0 })     ||
+      ((right && up)    && { x: 0, y: 64 });
+  
     context.drawImage(
       sprites,
-      spriteTailPosition.x,
-      spriteTailPosition.y,
-      64,
-      64,
-      snake[snake.length - 1].x,
-      snake[snake.length - 1].y,
-      box,
-      box
+      spriteBodyPosition.x, spriteBodyPosition.y,
+      64, 64,
+      snake[i].x, snake[i].y,
+      box, box
     );
   }
+}
 
-  for (i = 1; i < snake.length - 1; i++) {
-    let haveRight = (haveLeft = haveUp = haveDown = false);
-
-    if (snake[i].direction.x > 0) haveRight = true;
-    if (snake[i].direction.x < 0) haveLeft = true;
-    if (snake[i].direction.y > 0) haveDown = true;
-    if (snake[i].direction.y < 0) haveUp = true;
-
-    let nodoAnteriorX = snake[i + 1].direction.x * -1;
-    let nodoAnteriory = snake[i + 1].direction.y * -1;
-
-    if (nodoAnteriorX < 0) haveLeft = true;
-    if (nodoAnteriorX > 0) haveRight = true;
-    if (nodoAnteriory < 0) haveUp = true;
-    if (nodoAnteriory > 0) haveDown = true;
-
-    let spriteBodyPosition = {
-      x: 64,
-      y: 0,
-    };
-
-    if (haveLeft && haveRight) spriteBodyPosition = { x: 64, y: 0 };
-    if (haveUp && haveDown) spriteBodyPosition = { x: 128, y: 64 };
-    if (haveLeft && haveDown) spriteBodyPosition = { x: 128, y: 0 };
-    if (haveLeft && haveUp) spriteBodyPosition = { x: 128, y: 128 };
-    if (haveRight && haveDown) spriteBodyPosition = { x: 0, y: 0 };
-    if (haveRight && haveUp) spriteBodyPosition = { x: 0, y: 64 };
-
+function drawSnakeTail() {
+  if (snake.length) {
+    let i = snake.length - 1;
+    const spriteTailPosition =
+      ((snake[i].direction.x > 0) && { x: 256, y: 128 }) ||
+      ((snake[i].direction.x < 0) && { x: 192, y: 192 }) ||
+      ((snake[i].direction.y > 0) && { x: 256, y: 192 }) ||
+      ((snake[i].direction.y < 0) && { x: 192, y: 128 });
+  
     context.drawImage(
       sprites,
-      spriteBodyPosition.x,
-      spriteBodyPosition.y,
-      64,
-      64,
-      snake[i].x,
-      snake[i].y,
-      box,
-      box
+      spriteTailPosition.x, spriteTailPosition.y,
+      64, 64,
+      snake[i].x, snake[i].y,
+      box, box
     );
   }
+}
+
+function drawSnake() {
+  drawSnakeHead();
+  drawSnakeBody();
+  drawSnakeTail();
 }
 
 const drawFood = () => {
@@ -168,24 +143,20 @@ const drawFood = () => {
     sprites,
     0,
     192,
-    64,
-    64,
-    food.x,
-    food.y,
-    box,
-    box
+    64, 64,
+    food.x, food.y,
+    box, box
   );
 }
 
-const updateScore = () => {
+function updateScore() {
   const scoreElement = document.getElementById("score");
 
   scoreElement.textContent = score;
 }
 
-const updateStorage = () => {
-  localStorage.setItem("high-scores",
-    JSON.stringify(highScores.sort(compare)));
+function updateStorage() {
+  localStorage.setItem("high-scores", JSON.stringify(highScores.sort(compare)));
 }
 
 const KEY_CODES = {
@@ -311,8 +282,6 @@ function startGame() {
     if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
       deadSound.play();
 
-      let record = false;
-
       for (let i = 0; i < 3; i++) {
         if (score >= highScores[i]) {
           highScores[2] = score;
@@ -355,7 +324,6 @@ function startGame() {
     do {
       foodX = Math.floor(Math.random() * 15 + 1) * box;
       foodY = Math.floor(Math.random() * 15 + 1) * box;
-      /* Se encontrar, retornará um objeto. Qualquer coisa diferente de "NaN", "undefined" e "null", é interpretado como "true" */
       invalidPosition = snake.find(snake => (snake.x === foodX && snake.y === foodY));
     } while (invalidPosition);
 
@@ -412,8 +380,8 @@ window.addEventListener("load", () => {
   if (thisScores) {
     for (let score of thisScores) {
       highScores[i] = score;
-      i++;
-      if (i === 3) {
+      
+      if (++i === 3) {
         break;
       }
     }
